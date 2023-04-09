@@ -1,9 +1,23 @@
 import { ColumnModel } from "*/models/column.model";
+import { BoardModel } from "*/models/board.model";
+import { CardModel } from "*/models/card.model";
 const createNew = async (data) => {
   try {
-    const result = await ColumnModel.createNew(data);
+    const newColumn = await ColumnModel.createNew(data);
 
-    return result;
+    const getNewColumn = await ColumnModel.findOneById(
+      newColumn.insertedId.toString()
+    );
+
+    //update columnOrder Array in board collsection
+    await BoardModel.pushColumnOrder(
+      getNewColumn.boardId.toString(),
+      getNewColumn._id.toString()
+      //  vaan chay nhung thong  bao loi ben postman
+      // newColumn.boardId,
+      // newColumn._id
+    );
+    return getNewColumn;
   } catch (error) {
     throw new Error(error);
   }
