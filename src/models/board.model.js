@@ -53,7 +53,6 @@ const pushColumnOrder = async (boardId, columnId) => {
 };
 const getFullBoard = async (boardId) => {
   try {
-    console.log(ColumnModel.columnCollectionName);
     const result = await getDB()
       .collection(boardCollectionName)
       .aggregate([
@@ -85,7 +84,7 @@ const getFullBoard = async (boardId) => {
         },
       ])
       .toArray();
-    console.log(result);
+    // console.log(result);
     // console.log(result.ops[0]);
     return result[0] || {};
   } catch (error) {

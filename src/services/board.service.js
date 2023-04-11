@@ -13,7 +13,9 @@ const createNew = async (data) => {
 const getFullBoard = async (boardId) => {
   try {
     const board = await BoardModel.getFullBoard(boardId);
-
+    if (!board || !board.columns) {
+      throw new Error("Board not found!");
+    }
     //add card to each column
     board.columns.forEach((column) => {
       column.cards = board.cards.filter(
@@ -25,7 +27,7 @@ const getFullBoard = async (boardId) => {
 
     //remove cards data from boards
     delete board.cards;
-    console.log(board);
+    // console.log(board);
     return board;
   } catch (error) {
     throw new Error(error);
