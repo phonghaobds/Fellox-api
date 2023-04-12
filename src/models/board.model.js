@@ -22,7 +22,6 @@ const createNew = async (data) => {
     const result = await getDB()
       .collection(boardCollectionName)
       .insertOne(value);
-    // console.log(result.ops[0]);
     return result;
   } catch (error) {
     throw new Error(error);
@@ -59,6 +58,7 @@ const getFullBoard = async (boardId) => {
         {
           $match: {
             _id: new ObjectId(boardId),
+            _destroy: false,
           },
         },
         // {

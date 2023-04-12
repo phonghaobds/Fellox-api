@@ -10,7 +10,6 @@ const createNew = async (data) => {
       getNewCard.columnId.toString(),
       getNewCard._id.toString()
     );
-    console.log(getNewCard);
     return getNewCard;
   } catch (error) {
     throw new Error(error);

@@ -4,6 +4,7 @@ import { CardModel } from "*/models/card.model";
 const createNew = async (data) => {
   try {
     const newColumn = await ColumnModel.createNew(data);
+    newColumn.cards = [];
 
     const getNewColumn = await ColumnModel.findOneById(
       newColumn.insertedId.toString()
@@ -28,9 +29,14 @@ const update = async (id, data) => {
       ...data,
       updatedAt: Date.now(),
     };
-    const result = await ColumnModel.update(id, updateData);
-
-    return result;
+    if (updateData._id) delete updateData._id;
+    if (updateData.cards) delete updateData.cards;
+    const updatedColumn = await ColumnModel.update(id, updateData);
+    if (updatedColumn._destroy) {
+      //delete many card in this column
+      CardModel.deleteMany(updatedColumn.cardOrder);
+    }
+    return updatedColumn;
   } catch (error) {
     throw new Error(error);
   }
