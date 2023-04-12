@@ -24,7 +24,7 @@ const findOneById = async (id) => {
     const result = await getDB()
       .collection(columnCollectionName)
       .findOne({ _id: new ObjectId(id) });
-    // console.log(result.ops[0]);
+
     return result;
   } catch (error) {
     throw new Error(error);
@@ -63,7 +63,6 @@ const createNew = async (data) => {
     const result = await getDB()
       .collection(columnCollectionName)
       .insertOne(insertValue);
-    // console.log(result.ops[0]);
 
     return result;
   } catch (error) {
@@ -72,15 +71,18 @@ const createNew = async (data) => {
 };
 const update = async (id, data) => {
   try {
-    const result = await getDB()
+    const updateData = {
+      ...data,
+      boardId: new ObjectId(data.boardId),
+    };
+    const updatedColumn = await getDB()
       .collection(columnCollectionName)
       .findOneAndUpdate(
         { _id: new ObjectId(id) },
-        { $set: data },
+        { $set: updateData },
         { returnDocument: "after" }
       );
-    // console.log(result.ops[0]);
-    return result.value;
+    return updatedColumn.value;
   } catch (error) {
     throw new Error(error);
   }
