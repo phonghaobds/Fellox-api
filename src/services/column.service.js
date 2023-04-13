@@ -41,4 +41,4 @@ const update = async (id, data) => {
     throw new Error(error);
   }
 };
-export const ColumnSerVice = { createNew, update };
+export const ColumnService = { createNew, update };

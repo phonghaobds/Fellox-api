@@ -44,6 +44,29 @@ const createNew = async (data) => {
     throw new Error(error);
   }
 };
+const update = async (id, data) => {
+  try {
+    const updateData = {
+      ...data,
+    };
+    if (data.boardId) {
+      updateData.boardId = new ObjectId(data.boardId);
+    }
+    if (data.columnId) {
+      updateData.columnId = new ObjectId(data.columnId);
+    }
+    const updatedBoard = await getDB()
+      .collection(cardCollectionName)
+      .findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: updateData },
+        { returnDocument: "after" }
+      );
+    return updatedBoard.value;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 /**
  *
  * @param {Array of string card id} ids
@@ -65,4 +88,5 @@ export const CardModel = {
   createNew,
   findOneById,
   deleteMany,
+  update,
 };
