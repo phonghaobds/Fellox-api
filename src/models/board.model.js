@@ -3,6 +3,7 @@ import { getDB } from "*/config/mongodb";
 import { ObjectId } from "mongodb";
 import { ColumnModel } from "./column.model";
 import { CardModel } from "./card.model";
+
 //Define Board collection
 const boardCollectionName = "board";
 const boardCollectionSchema = Joi.object({
@@ -23,6 +24,24 @@ const createNew = async (data) => {
       .collection(boardCollectionName)
       .insertOne(value);
     return result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const update = async (id, data) => {
+  try {
+    const updateData = {
+      ...data,
+    };
+    const updatedBoard = await getDB()
+      .collection(boardCollectionName)
+      .findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: updateData },
+        { returnDocument: "after" }
+      );
+    return updatedBoard.value;
   } catch (error) {
     throw new Error(error);
   }
@@ -92,4 +111,4 @@ const getFullBoard = async (boardId) => {
   }
 };
 
-export const BoardModel = { createNew, pushColumnOrder, getFullBoard };
+export const BoardModel = { createNew, pushColumnOrder, getFullBoard, update };
